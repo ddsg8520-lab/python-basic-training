@@ -1,0 +1,77 @@
+class TodoManager:
+    def __init__(self):
+        self.todo_list = []
+
+    def add_todo(self):
+        try:
+            b = str(input("할 일을 입력 하세요 : "))
+            self.todo_list.append(b)
+        except ValueError:
+            print("잘못된 입력입니다")
+    
+    def del_todo(self):
+        try:
+            if not self.todo_list:
+                print("할 일이 없습니다.")
+                return
+            for i, item in enumerate(self.todo_list):
+                print(i+1, item)
+            del_a = int(input("삭제할 번호를 입력하세요: "))
+            self.todo_list.pop(del_a-1)
+        except ValueError:
+            print("번호를 숫자로 입력하세요")
+        except IndexError:
+            print("존재하지 않는 번호입니다")
+
+    def check_todo(self):
+        if not self.todo_list:
+            print("할 일이 없습니다.")
+            return
+        print("할 일 목록입니다")
+        for i, check_list in enumerate(self.todo_list):
+            print(i+1, check_list)
+
+    def save_todo(self):
+        with open("todo.txt", "w", encoding="utf-8") as f:
+            for item in self.todo_list:
+                f.write(item + "\n")
+    
+    def load_todo(self):
+        try:
+
+            with open("todo.txt", "r", encoding="utf-8") as f:
+                self.todo_list.clear()
+                for line in f:
+                    self.todo_list.append(line.strip())
+        except FileNotFoundError:
+            print("저장된 파일이 없습니다")
+
+def main():  
+    manager = TodoManager()      
+    manager.load_todo()
+    while True:
+        try:
+            a = int(input("1.할 일 추가 2. 할 일 삭제 3. 목록 보기 4. 파일 저장 5. 파일 불러오기 0.종료"))
+            if a == 0:
+                print("종료합니다")
+                break
+            elif a == 1:
+                manager.add_todo()
+            elif a == 2:
+                manager.del_todo()
+            elif a == 3:
+                manager.check_todo()
+            elif a == 4:
+                manager.save_todo()
+            elif a == 5:
+                manager.load_todo()
+            else:
+                print("입력값이 올바르지 않습니다")
+
+        except ValueError:
+            print("잘못된 입력입니다")
+
+if __name__ == "__main__":
+    main()
+        
+
